@@ -4,4 +4,4 @@
 npm install
 
 ## run 
-DEBUG=ec2-backend:* npm start
+npm run start:dev
