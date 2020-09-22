@@ -6,7 +6,8 @@
     "lint": "tslint --project \"tsconfig.json\"",
     "start": "node -r module-alias/register ./dist --env=production",
     "start:dev": "nodemon",
-    "test": "nodemon --config ./spec/nodemon.json"
+    "test": "nodemon --config ./spec/nodemon.json",
+    "ci": "start-server-and-test start:dev http://localhost:3000 test"
   },
   "nodemonConfig": {
     "watch": [
@@ -35,6 +36,7 @@
     "jsonfile": "^6.0.1",
     "module-alias": "^2.2.2",
     "morgan": "^1.10.0",
+    "start-server-and-test": "^1.11.4",
     "tslib": "^2.0.1",
     "winston": "^3.3.3"
   },
