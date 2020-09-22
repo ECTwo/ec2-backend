@@ -3,6 +3,7 @@ import Jasmine from 'jasmine';
 import dotenv from 'dotenv';
 import commandLineArgs from 'command-line-args';
 import logger from '@shared/Logger';
+import { exit } from 'process';
 
 // Setup command line options
 const options = commandLineArgs([
