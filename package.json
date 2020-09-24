@@ -8,7 +8,9 @@
     "start:dev": "nodemon",
     "test": "exit 0",
     "dev-test": "nodemon --config ./spec/nodemon.json",
-    "ci": "start-server-and-test start:dev http://localhost:3000"
+    "ci": "start-server-and-test start:dev http://localhost:3000",
+    "build-proto": "sh proto/build.sh",
+    "terraform-server": "ts-node terraform/index.ts"
   },
   "nodemonConfig": {
     "watch": [

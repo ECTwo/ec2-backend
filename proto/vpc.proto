@@ -1,0 +1,18 @@
+syntax = "proto3";
+package vpc;
+
+import "google/protobuf/empty.proto";
+
+enum Subnet {
+    TYPE_1 = 0;
+    TYPE_2 = 1;
+}
+
+message Vpc {
+    int32 id = 1;
+    Subnet subnet = 2;
+}
+
+service VpcServices {
+    rpc CreateVPC(stream Vpc) returns (google.protobuf.Empty) {};
+}
