@@ -7,7 +7,7 @@ const router = Router();
 
 
 router.get('/securitygroups', async (req: Request, res: Response) => {
-    const { region, access_key, secret_key } = req.body;
+    const { region, access_key, secret_key } = req.headers;
    
     let ret:PromiseType = await execShellCommand(`docker-compose -f helper/docker-compose.yml run \
     -e AWS_DEFAULT_REGION=${region} \
