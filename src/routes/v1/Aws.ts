@@ -7,10 +7,11 @@ const router = Router();
 
 
 router.get('/securitygroups', async (req: Request, res: Response) => {
-    const { region, access_key, secret_key } = req.headers;
-   
+    const { access_key, secret_key } = req.headers;
+    const { region } = req.query
+
     let ret:PromiseType = await execShellCommand(`docker-compose -f helper/docker-compose.yml run \
-    -e AWS_DEFAULT_REGION=${region} \
+    -e AWS_DEFAULT_REGION=${region || 'us-east-1'} \
     -e AWS_ACCESS_KEY_ID=${access_key} \
     -e AWS_SECRET_ACCESS_KEY=${secret_key} \
     --rm aws ec2 describe-security-groups \
