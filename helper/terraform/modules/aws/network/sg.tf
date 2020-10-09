@@ -1,5 +1,4 @@
 resource "aws_security_group" "my_app" {
-  vpc_id      = ${aws_vpc.aws_terraform_vpc.id}
   name        = "myapp-security-group"
   description = "hello world!"
 
