@@ -7,10 +7,6 @@ variable "secret_key" {
 variable "region" {
   type = string
 }
-variable "root" {
-  type = string
-}
-
 variable "subnet" {
   type = string
 }
