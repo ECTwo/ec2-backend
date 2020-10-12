@@ -1,3 +1,5 @@
+*.tfstate.*
+
 *.rest
 # OS X
 .DS_Store*
