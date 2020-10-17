@@ -1,0 +1,3 @@
+[submodule "terraform-boilerplate"]
+	path = terraform-boilerplate
+	url = https://github.com/kimkihyuk/terraform-boilerplate
