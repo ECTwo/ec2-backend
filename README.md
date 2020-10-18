@@ -15,4 +15,4 @@ clone 후 처음 1회만 실행
 
 이 후 submodule 레포지토리 업데이트를 따라가려면
 
-```git submodule update```
+```git submodule update --remote```
