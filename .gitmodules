@@ -1,6 +1,4 @@
 [submodule "terraform-boilerplate"]
 	path = terraform-boilerplate
-	url = https://github.com/kimkihyuk/terraform-boilerplate
-[submodule "terraform"]
-	path = terraform
-	url = https://github.com/kimkihyuk/terraform-boilerplate.git
+	url = https://github.com/KimKiHyuk/terraform-boilerplate.git
+	branch = main
