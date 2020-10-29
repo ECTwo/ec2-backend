@@ -1,12 +1,8 @@
 name: Integrate service
 on: 
-  push:
-    branches:
-      - "**"
   pull_request:
     branches:
-      - main
-      - master    
+      - "**"   
 jobs:
   ci:
     runs-on: ubuntu-latest
