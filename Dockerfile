@@ -12,9 +12,7 @@ RUN apk update && \
     apk add git && \
     apk add npm && \
     apk add terraform
-RUN terraform --version
 RUN npm install
-RUN echo "run server listening 3000"
 CMD ["npm", "run", "start:dev", "2>/dev/null"]
 
 
