@@ -7,6 +7,7 @@ on:
 
 jobs:
   dockerize-and-push:
+    name: Deploy to Dockerhub
     runs-on: ubuntu-latest
     steps:
     -
