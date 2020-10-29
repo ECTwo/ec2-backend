@@ -1,3 +1,5 @@
+name: Build & deploy docker
+
 on:
   release:
     types:
