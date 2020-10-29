@@ -5,6 +5,10 @@ on:
     branches: 
       - release/**
       - deploy/**
+    pull_request:
+      branches:
+        - main
+        - master 
 
 jobs:
   dockerize-and-push:
