@@ -1,5 +1,11 @@
 name: backend CI
-on: [push, pull_request]
+on: 
+  push:
+      - main
+  pull_request:
+    branches:
+      - main
+      - master    
 jobs:
   ci:
     runs-on: ubuntu-latest
