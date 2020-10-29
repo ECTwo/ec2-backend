@@ -2,6 +2,7 @@ name: backend CI
 on: 
   push:
       - main
+      - master
   pull_request:
     branches:
       - main
