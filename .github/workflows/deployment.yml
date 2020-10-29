@@ -52,7 +52,6 @@ jobs:
         wait-for-service-stability: true
 
   send-slack:
-    needs: dockerize-and-push
     runs-on: ubuntu-latest
     steps:
     - 
