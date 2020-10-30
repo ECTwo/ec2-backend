@@ -55,7 +55,7 @@ jobs:
       with:
         task-definition: ${{ steps.task-def.outputs.task-definition }}
         service: app
-        cluster: bob_ecs
+        cluster: bobcluster
         wait-for-service-stability: true
 
   # send-slack:
