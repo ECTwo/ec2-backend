@@ -31,7 +31,7 @@ jobs:
       id: build-image
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        ECR_REPOSITORY: bob
+        ECR_REPOSITORY: keykim/deploy
         IMAGE_TAG: latest
       run: |
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
@@ -40,7 +40,7 @@ jobs:
     -
       name: Download task definition
       run: |
-        aws ecs describe-task-definition --task-definition bob_ecs --query taskDefinition > task-definition.json
+        aws ecs describe-task-definition --task-definition bobapp-staging --query taskDefinition > task-definition.json
     -
       name: Fill task definition
       id: task-def
@@ -55,7 +55,7 @@ jobs:
       with:
         task-definition: ${{ steps.task-def.outputs.task-definition }}
         service: app
-        cluster: bobcluster
+        cluster: bobapp-ecs-cluster
         wait-for-service-stability: true
 
   # send-slack:
