@@ -40,7 +40,7 @@ jobs:
     -
       name: Download task definition
       run: |
-        aws --profile key ecs describe-task-definition --task-definition bob_ecs --query taskDefinition > task-definition.json
+        aws ecs describe-task-definition --task-definition bob_ecs --query taskDefinition > task-definition.json
     -
       name: Fill task definition
       id: task-def
