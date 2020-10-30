@@ -1,5 +1,8 @@
 name: Deploy AWS
 on:
+  push:
+    branches:
+      - deploy/**
   release:
     types:
       - created
@@ -34,13 +37,17 @@ jobs:
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
-    - 
+    -
+      name: Download task definition
+      run: |
+        aws --profile key ecs describe-task-definition --task-definition bob_ecs --query taskDefinition > task-definition.json
+    -
       name: Fill task definition
       id: task-def
       uses: aws-actions/amazon-ecs-render-task-definition@v1
       with:
-        task-definition: mytaskdef.json
-        container-name: bob_ec2
+        task-definition: task-definition.json
+        container-name: bob_ecs
         image: ${{ steps.build-image.outputs.image }}
     - 
       name: Deploy Amazon ECS task definition
@@ -48,22 +55,22 @@ jobs:
       with:
         task-definition: ${{ steps.task-def.outputs.task-definition }}
         service: app
-        cluster: bob_ec2
+        cluster: bob_ecs
         wait-for-service-stability: true
 
-  send-slack:
-    runs-on: ubuntu-latest
-    steps:
-    - 
-      name: Checkout
-      uses: actions/checkout@v1
-    -
-      name: Send notification
-      uses: 8398a7/action-slack@v3
-      with:
-        status: ${{ job.status }}
-        fields: repo,message,commit,author,action,eventName,ref,workflow,job,took # selectable (default: repo,message)
-      env:
-        GITHUB_TOKEN: ${{ github.token }} # optional
-        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
-      if: always() # Pick up events even if the job fails or is canceled.
+  # send-slack:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - 
+  #     name: Checkout
+  #     uses: actions/checkout@v1
+  #   -
+  #     name: Send notification
+  #     uses: 8398a7/action-slack@v3
+  #     with:
+  #       status: ${{ job.status }}
+  #       fields: repo,message,commit,author,action,eventName,ref,workflow,job,took # selectable (default: repo,message)
+  #     env:
+  #       GITHUB_TOKEN: ${{ github.token }} # optional
+  #       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
+  #     if: always() # Pick up events even if the job fails or is canceled.
