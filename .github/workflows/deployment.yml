@@ -58,10 +58,6 @@ jobs:
         service: staging
         cluster: bobapp-ecs-cluster
         wait-for-service-stability: true
-
-  send-slack:
-    runs-on: ubuntu-latest
-    steps:
     - 
       name: Checkout
       uses: actions/checkout@v1
