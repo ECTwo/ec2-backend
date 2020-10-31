@@ -1,11 +1,12 @@
 name: Deploy AWS
 on:
-  push:
-    branches:
-      - deploy/**
   release:
     types:
       - created
+  push:
+    branches:
+      - "main"
+      - "master"
 
 jobs:
   Deploy-to-aws:
@@ -58,19 +59,19 @@ jobs:
         cluster: bobapp-ecs-cluster
         wait-for-service-stability: true
 
-  # send-slack:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - 
-  #     name: Checkout
-  #     uses: actions/checkout@v1
-  #   -
-  #     name: Send notification
-  #     uses: 8398a7/action-slack@v3
-  #     with:
-  #       status: ${{ job.status }}
-  #       fields: repo,message,commit,author,action,eventName,ref,workflow,job,took # selectable (default: repo,message)
-  #     env:
-  #       GITHUB_TOKEN: ${{ github.token }} # optional
-  #       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
-  #     if: always() # Pick up events even if the job fails or is canceled.
+  send-slack:
+    runs-on: ubuntu-latest
+    steps:
+    - 
+      name: Checkout
+      uses: actions/checkout@v1
+    -
+      name: Send notification
+      uses: 8398a7/action-slack@v3
+      with:
+        status: ${{ job.status }}
+        fields: repo,message,commit,author,action,eventName,ref,workflow,job,took # selectable (default: repo,message)
+      env:
+        GITHUB_TOKEN: ${{ github.token }} # optional
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
+      if: always() # Pick up events even if the job fails or is canceled.
