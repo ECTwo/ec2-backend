@@ -6,8 +6,6 @@ USER root
 WORKDIR /ec2_backend
 COPY . .
 
-EXPOSE 80 443
-
 RUN apk update && \
     apk add git && \
     apk add npm && \

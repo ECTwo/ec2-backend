@@ -4,6 +4,10 @@ on:
   release:
     types:
       - created
+  push:
+    branches:
+      - "main"
+      - "master"
 
 jobs:
   dockerize-and-push:

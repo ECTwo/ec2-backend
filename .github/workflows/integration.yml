@@ -1,6 +1,6 @@
 name: Integrate service
 on: 
-  pull_request:
+  push:
     branches:
       - "**"   
 jobs:
