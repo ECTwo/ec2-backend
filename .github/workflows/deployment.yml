@@ -58,9 +58,6 @@ jobs:
         service: staging
         cluster: bobapp-ecs-cluster
         wait-for-service-stability: true
-    - 
-      name: Checkout
-      uses: actions/checkout@v1
     -
       name: Send notification
       uses: 8398a7/action-slack@v3
