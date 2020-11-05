@@ -55,6 +55,7 @@ router.post('/:user', async (req: Request, res: Response) => {
     // issue #
     try {
       await execShellCommand(`terraform workspace new ${user}_arch`);
+      await execShellCommand(`terraform init ${process.env.SRC}/terraform/arch/bob/only_ec2`);
     }
     catch(error) {
       logger.info(error)
@@ -62,7 +63,6 @@ router.post('/:user', async (req: Request, res: Response) => {
     
     logger.info(`${process.env.SRC}`)
     
-    await execShellCommand(`terraform init ${process.env.SRC}/terraform/arch/bob/only_ec2`);
 
     await execShellCommand(`terraform apply -auto-approve \
                             -var "region=us-east-2" \
@@ -85,8 +85,6 @@ router.get('/:user', async (req: Request, res: Response) => {
 
     logger.info(`input value = ${user}, ${workspace}`);
 
-
-    // run 
     return res.status(200).end();
 });
 
