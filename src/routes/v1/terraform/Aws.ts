@@ -7,8 +7,11 @@ const fs = require('fs');
 const router = Router();
 
 router.post('/:user', async (req: Request, res: Response) => {
-    // get data
+    const user = req.params.user;
+    const { access_key, secret_key } = req.headers;
     const body = req.body
+
+    req.setTimeout(1000 * 1 * 60 * 5)
 
     body['publicData'].key = "public::key"
     for (let x of body['privateData']['server']) {
@@ -17,13 +20,6 @@ router.post('/:user', async (req: Request, res: Response) => {
     
     let data = JSON.stringify(body);
     fs.writeFileSync(`${process.env.SRC}/data.json`, data);
-    
-    return res.status(200).send(body);
-    // dataset
-
-    const user = req.params.user;
-    const { access_key, secret_key } = req.headers;
-    req.setTimeout(1000 * 1 * 60 * 5)
     
     // ws의 결과, 이미 존재하는 workspace라면 workspace를 수행하지 않습니다
     // issue #
@@ -38,16 +34,14 @@ router.post('/:user', async (req: Request, res: Response) => {
     logger.info(`${process.env.SRC}`)
     
 
-    // await execShellCommand(`terraform apply -auto-approve \
-    //                         -var "region=us-east-2" \
-    //                         -var "access_key=${access_key}" \
-    //                         -var "secret_key=${secret_key}" \
-    //                         -var "public_cnt=${publicData.server.length}" \
-    //                         -var "private_cnt=${privateData.server.length}" \
-    //                         ${process.env.SRC}/terraform/arch/bob/only_ec2`)
+    await execShellCommand(`terraform apply -auto-approve \
+                            -var "region=us-east-2" \
+                            -var "access_key=${access_key}" \
+                            -var "secret_key=${secret_key}" \
+                            ${process.env.SRC}/terraform/arch/bob/only_ec2`)
 
     fs.readFile(`${process.env.SRC}/../terraform.tfstate.d/${user}_arch/terraform.tfstate`, (err, data) => {
-      if (err) return res.status(200).end();
+      if (err) return res.status(404).end();
   
       return res.status(200).send(JSON.parse(data));
     });
@@ -56,15 +50,10 @@ router.post('/:user', async (req: Request, res: Response) => {
 router.get('/:user', async (req: Request, res: Response) => {
     const user = req.params.user;
     const workspace = req.query.workspace;
-    const backdoor = req.headers.bob;
-
-    if(backdoor !== 'bobec2') {
-      return res.status(401).end();  
-    }
 
     logger.info(`input value = ${user}, ${workspace}`);
 
-    return res.status(200).end();
+    return res.status(200).send({"hello" : "world"});
 });
 
 

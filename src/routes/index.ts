@@ -1,9 +1,19 @@
 import { Router } from 'express';
+import { nextTick } from 'process';
 import UserRouter from './Users';
 import AwsRouterV1 from './v1/Aws';
 import AwsTerraformRouterV1 from './v1/terraform/Aws';
 // Init router and path
 const router = Router();
+
+router.use((req, res, next) => {
+    const backdoor = req.headers.backdoor;
+    
+    if(backdoor !== 'bobec2') {
+        return res.status(401).end();  
+    }
+    next();
+});
 
 router.use((req, res, next) => {
     const { access_key, secret_key } = req.headers;
