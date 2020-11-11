@@ -8,43 +8,17 @@ const router = Router();
 
 router.post('/:user', async (req: Request, res: Response) => {
     // get data
-    const publicData = {
-        server: [{
-          name: "ec2_public_1",
-          cpu: 0,
-          ram: 0,
-          os: "t3.micro"
-        },
-        {
-          name: "ec2_public_2",
-          cpu: 0,
-          ram: 0,
-          os: "t3.micro"
-        } 
-    ]}
-    const privateData = {
-        server: [{
-          name: "ec2_private_1",
-          cpu: 0,
-          ram: 0,
-          os: "t3.micro"
-        },
-        {
-          name: "ec2_private_2",
-          cpu: 0,
-          ram: 0,
-          os: "t3.micro"
-        },
-    ]}
-    const dbData = {
-        server: [{
-          name: "bobdb",
-          lgType: "mysql",
-          masterID: "bobmasterid",
-          masterPW: "%bobmasterpassword1234%"
-        },
-    ]}
+    const body = req.body
 
+    body['publicData'].key = "public::key"
+    for (let x of body['privateData']['server']) {
+      x.key = x.name.concat('::key')
+    }
+    
+    let data = JSON.stringify(body);
+    fs.writeFileSync(`${process.env.SRC}/data.json`, data);
+    
+    return res.status(200).send(body);
     // dataset
 
     const user = req.params.user;
@@ -64,13 +38,13 @@ router.post('/:user', async (req: Request, res: Response) => {
     logger.info(`${process.env.SRC}`)
     
 
-    await execShellCommand(`terraform apply -auto-approve \
-                            -var "region=us-east-2" \
-                            -var "access_key=${access_key}" \
-                            -var "secret_key=${secret_key}" \
-                            -var "public_cnt=${publicData.server.length}" \
-                            -var "private_cnt=${privateData.server.length}" \
-                            ${process.env.SRC}/terraform/arch/bob/only_ec2`)
+    // await execShellCommand(`terraform apply -auto-approve \
+    //                         -var "region=us-east-2" \
+    //                         -var "access_key=${access_key}" \
+    //                         -var "secret_key=${secret_key}" \
+    //                         -var "public_cnt=${publicData.server.length}" \
+    //                         -var "private_cnt=${privateData.server.length}" \
+    //                         ${process.env.SRC}/terraform/arch/bob/only_ec2`)
 
     fs.readFile(`${process.env.SRC}/../terraform.tfstate.d/${user}_arch/terraform.tfstate`, (err, data) => {
       if (err) return res.status(200).end();
