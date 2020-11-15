@@ -38,7 +38,7 @@ router.post('/:user', async (req: Request, res: Response) => {
                             -var "region=${region}" \
                             -var "access_key=${access_key}" \
                             -var "secret_key=${secret_key}" \
-                            -var "ami=${ami} \
+                            -var "ami=${ami}" \
                             -var "src=${process.env.SRC}/${user}_data.json" \
                             ${process.env.SRC}/terraform/arch/bob/only_ec2`)
 
