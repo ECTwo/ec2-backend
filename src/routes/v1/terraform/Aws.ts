@@ -13,7 +13,7 @@ router.post('/:user', async (req: Request, res: Response) => {
 
     req.setTimeout(1000 * 1 * 60 * 5)
 
-    body['publicData'].key = "public::key"
+    body['publicData'].key = `${user}::public::key`
     for (let x of body['privateData']['server']) {
       x.key = x.name.concat('::key')
     }
