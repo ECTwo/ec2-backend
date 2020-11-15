@@ -19,7 +19,7 @@ router.post('/:user', async (req: Request, res: Response) => {
     }
     
     let data = JSON.stringify(body);
-    fs.writeFileSync(`${process.env.SRC}/data.json`, data);
+    fs.writeFileSync(`${process.env.SRC}/${user}_data.json`, data);
     
     // ws의 결과, 이미 존재하는 workspace라면 workspace를 수행하지 않습니다
     // issue #
@@ -38,6 +38,7 @@ router.post('/:user', async (req: Request, res: Response) => {
                             -var "region=us-east-2" \
                             -var "access_key=${access_key}" \
                             -var "secret_key=${secret_key}" \
+                            -var "src=${process.env.SRC}/${user}_data.json" \
                             ${process.env.SRC}/terraform/arch/bob/only_ec2`)
 
     fs.readFile(`${process.env.SRC}/../terraform.tfstate.d/${user}_arch/terraform.tfstate`, (err, data) => {
@@ -62,17 +63,23 @@ router.delete('/:user', async (req: Request, res: Response) => {
     const user = req.params.user;
     req.setTimeout(1000 * 1 * 60 * 5)
 
-    logger.info('start to delete ' + user)
-    await execShellCommand(`terraform workspace select ${user}_arch`);
-    let ret:PromiseType = await execShellCommand(`terraform destroy -auto-approve \
-            -var "access_key=${access_key}" \
-            -var "secret_key=${secret_key}" \
-            -var "region=us-east-2" \
-            ${process.env.SRC}/terraform/arch/bob/only_ec2`);
+    logger.info('start to del1ete ' + user)
 
-    if (ret.result == 1 || ret.result == 2) {
-        return res.status(400).end(ret.message);
+    try {
+      await execShellCommand(`terraform destroy -auto-approve \
+      -var "region=us-east-2" \
+      -var "access_key=${access_key}" \
+      -var "secret_key=${secret_key}" \
+      -var "src=${process.env.SRC}/${user}_data.json" \
+      -state=${process.env.SRC}/../terraform.tfstate.d/${user}_arch/terraform.tfstate \
+      ${process.env.SRC}/terraform/arch/bob/only_ec2`)
+   
     }
+    catch(error) {
+      logger.info(error)
+      return res.status(404).end();
+    }
+  
 
     return res.status(200).end();
 });
