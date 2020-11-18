@@ -79,7 +79,7 @@ router.post('/:user', async (req: Request, res: Response) => {
     });
 })
 
-router.get('/:user', async (req: Request, res: Response) => {
+router.get('/:user', async (req, res) => {
     const user = req.params.user;
     const workspace = req.query.workspace;
 
@@ -121,9 +121,16 @@ router.get('/:user', async (req: Request, res: Response) => {
         keyArr.push({ path: `./${user}_${data.outputs.private_key[i].name}.pem`, name: `${data.outputs.private_key[i].name}.pem` });
     }
 
-    res.zip(keyArr); //zip name: attachment.zip
+    var async = require('async')
+  , http = require('http')
+  , express = require('express')
+  , fs = require('fs')
+  , resqest = express.response || http.ServerResponse.prototype
+  , zipstream = require('zip-stream');
 
-    return res.status(200).end();
+  resqest.zip(keyArr); //zip name: attachment.zip
+
+  //return res.status(200).end();
 });
 
 
