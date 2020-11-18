@@ -60,17 +60,17 @@ router.get('/:user', async (req: Request, res: Response) => {
 
 
 router.delete('/:user', async (req: Request, res: Response) => {
-    const { access_key, secret_key } = req.headers;
+    const { access_key, secret_key, region, ami } = req.headers;
     const user = req.params.user;
     req.setTimeout(1000 * 1 * 60 * 5)
-
     logger.info('start to del1ete ' + user)
 
     try {
       await execShellCommand(`terraform destroy -auto-approve \
-      -var "region=us-east-2" \
+      -var "region=${region}" \
       -var "access_key=${access_key}" \
       -var "secret_key=${secret_key}" \
+      -var "ami=${ami}" \
       -var "src=${process.env.SRC}/${user}_data.json" \
       -state=${process.env.SRC}/../terraform.tfstate.d/${user}_arch/terraform.tfstate \
       ${process.env.SRC}/terraform/arch/bob/only_ec2`)
